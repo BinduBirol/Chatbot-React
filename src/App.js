@@ -1,12 +1,17 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AuthRoutes from './routes/AuthRoutes';  // Your new AuthRoutes file
+import AuthRoutes from './routes/AuthRoutes';
+import DashboardRoutes from './routes/DashboardRoutes';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Wrap routes that require authentication */}
-        <Route path="/*" element={<AuthRoutes />} />
+        {/* Public Routes */}
+        <Route path="*" element={<AuthRoutes />} />
+        
+        {/* Protected Routes (only for authenticated users) */}
+        <Route path="/dashboard/*" element={<DashboardRoutes />} />
       </Routes>
     </Router>
   );
