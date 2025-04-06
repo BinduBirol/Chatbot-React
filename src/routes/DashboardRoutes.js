@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Routes, Route } from "react-router-dom";
-import Dashboard from "../components/Dashboards/Dashboard";
+import { useNavigate } from "react-router-dom";
 import { Spinner } from "react-bootstrap"; // Optional loading spinner
+import Dashboard from "../components/Dashboards/Dashboard"; // Correct path to your Dashboard component
 
 const DashboardRoutes = () => {
   const navigate = useNavigate();
@@ -14,30 +14,22 @@ const DashboardRoutes = () => {
     if (!token) {
       // If no token, set as not authenticated and redirect to login
       setIsAuthenticated(false);
+      navigate("/", {
+        state: { error: "You need to be logged in to view this page." },
+      });
     } else {
       // If token exists, user is authenticated
       setIsAuthenticated(true);
     }
   }, [navigate]);
 
-  // If still checking authentication status, show a loading spinner
+  // If still checking authentication status, show loading spinner
   if (isAuthenticated === null) {
     return <Spinner animation="border" variant="primary" />;
   }
 
-  // If not authenticated, show error message and redirect to login
-  if (isAuthenticated === false) {
-    navigate("/", {
-      state: { error: "You need to be logged in to view this page." },
-    });
-    return null;
-  }
-
-  return (
-    <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
-    </Routes>
-  );
+  // If authenticated, show the dashboard
+  return isAuthenticated ? <Dashboard /> : null;
 };
 
 export default DashboardRoutes;

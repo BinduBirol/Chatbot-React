@@ -8,13 +8,14 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);  // Added loading state
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
+    // Check if passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
@@ -28,8 +29,21 @@ const Register = () => {
       });
 
       if (response.status === 200) {
-        // Successfully registered, now redirect to login or dashboard
-        navigate('/login'); // Redirect to login page after successful registration
+        // After successful registration, authenticate and get the JWT token (or other response)
+        const loginResponse = await axios.post('/chatbot/api/auth/login', {
+          email,
+          password,
+        });
+
+        if (loginResponse.status === 200) {
+          const token = loginResponse.data.token; // Assuming the token is returned here
+
+          // Store the token in sessionStorage or localStorage
+          sessionStorage.setItem('token', token);
+
+          // Successfully authenticated, redirect to dashboard
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
       setError('Registration failed: ' + (err.response?.data || 'Please try again.'));

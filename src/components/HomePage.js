@@ -34,8 +34,8 @@ const HomePage = () => {
         navigate("/dashboard");
       }
     } catch (err) {
-      const errorMsg = err.response?.data || "Login failed";
-      setError("Login failed: " + errorMsg);
+      const errorMsg = err.response?.data || 'An error occurred. Please try again.';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
